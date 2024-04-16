@@ -1,17 +1,20 @@
 
-import { useEffect, useMemo, useReducer } from 'react';
+import { useEffect, useMemo } from 'react';
 import Form from "./components/Form"
-import { activityReducers, initialState } from "./reducers/activity-reducer"
 import ActivityList from "./components/ActivityList"
 import CaloriesTracker from './components/CaloriesTracker';
+import { useActivity } from './hooks/useActivity';
 
 function App() {
- const [state, dispatch] = useReducer(activityReducers, initialState)
+//  const [state, dispatch] = useReducer(activityReducers, initialState)
  
+const {state, dispatch} = useActivity()
+
  useEffect(() =>{
    localStorage.setItem('activities', JSON.stringify(state.activities))
   },[state.activities])
   
+  // eslint-disable-next-line react-hooks/exhaustive-deps, react-hooks/rules-of-hooks
   const canRestApp = () => useMemo (() => state.activities.length,[state.activities])
 
   return (
@@ -33,28 +36,20 @@ function App() {
 
       <section className="bg-lime-600 py-7 px-3 ">
         <div className="max-w-4xl mx-auto">
-          <Form
-            dispatch={dispatch}
-            state={state}
-          />
+          <Form />
         </div>
       </section>
       
-      <section className="bg-blue-300 py-10 px-3">
+      <section className="bg-black py-10 px-3">
         <div className="max-w-4xl mx-auto">
-          <CaloriesTracker
-            activities={state.activities}
-            // dispatch={dispatch}
-            // state={state}
-          />
+          <CaloriesTracker/>
         </div>
       </section>
 
 
       <section className="p-10 mx-auto max-w-4xl">
         <ActivityList 
-          activities={state.activities}
-          dispatch={dispatch}
+    
         />
       </section>
     </>
